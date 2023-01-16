@@ -1,0 +1,13 @@
+rich
+pymongo
+mongoengine
+Flask
+flask-cors
+flask-compress
+flask_mongoengine
+flask-smorest
+marshmallow
+marshmallow_enum
+colorlog
+requests
+phonenumbers
