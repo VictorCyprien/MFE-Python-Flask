@@ -1,3 +1,4 @@
+environs
 rich
 pymongo
 mongoengine
