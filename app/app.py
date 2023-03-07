@@ -12,6 +12,8 @@ from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 from flask_smorest import Api
 from flask.cli import AppGroup
+from flask_wtf.csrf import CSRFProtect
+
 from mongoengine import errors
 
 from .config import Config
@@ -20,8 +22,10 @@ from .config import Config
 def create_flask_app(config: Config) -> Flask:
     # Create the Flask App
     app = Flask(__name__)
+    csrf = CSRFProtect()
+    csrf.init_app(app)
 
-    CORS(app)
+    CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "False"}})
     Compress(app)
 
     app.logger = logging.getLogger('console')
