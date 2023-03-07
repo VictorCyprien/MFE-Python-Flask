@@ -40,11 +40,9 @@ def create_flask_app(config: Config) -> Flask:
     @app.after_request
     def after_request(response):
         """ Log response status, after every request. """
-        try:
-            app.logger.info(f'--> Response status: {response.status}')
-            app.logger.debug(f'      Body: {response.json}')
-        finally:
-            return response
+        app.logger.info(f'--> Response status: {response.status}')
+        app.logger.debug(f'      Body: {response.json}')
+        return response
 
     env = Env()
 
@@ -89,9 +87,5 @@ def create_flask_app(config: Config) -> Flask:
     # from .views.users import users_blp
     # rest_api.register_blueprint(users_blp)
 
-    try:
-        app.logger.debug(f"URL Map: \n{app.url_map}")
-    finally:
-        pass
-
+    app.logger.debug(f"URL Map: \n{app.url_map}")
     return app
