@@ -156,3 +156,5 @@ tests/test_api_kong.py
 
 # Scanner
 .scannerwork/
+
+.vscode/
