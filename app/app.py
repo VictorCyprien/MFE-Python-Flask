@@ -22,10 +22,13 @@ from .config import Config
 def create_flask_app(config: Config) -> Flask:
     # Create the Flask App
     app = Flask(__name__)
+    app.config["WTF_CSRF_CHECK_DEFAULT"] = True
+    app.config['CORS_HEADERS'] = 'Content-Type'
+
     csrf = CSRFProtect()
     csrf.init_app(app)
 
-    CORS(app, resources={r"/*": {"origins": "*", "send_wildcard": "False"}})
+    CORS(app, resources={r"/foo": {"origins": "https://localhost:port"}})
     Compress(app)
 
     app.logger = logging.getLogger('console')
