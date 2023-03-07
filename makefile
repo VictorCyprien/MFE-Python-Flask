@@ -3,7 +3,7 @@
 all: requirements
 
 run:
-	export FLASK_APP=run; export FLASK_ENV=development; flask run;
+	export FLASK_APP=run; export FLASK_ENV=development; flask run --host=0.0.0.0 --port=5001;
 
 shell:
 	export FLASK_APP=run; export FLASK_ENV=development; flask shell;
