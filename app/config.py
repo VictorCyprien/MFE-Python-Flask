@@ -23,7 +23,7 @@ class Config:
 
 
     @property
-    def MONGODB_SETTINGS(self):
+    def mongodb_settings(self):
         return {
             'host': f'{self.MONGODB_URI}/{self.MONGODB_DATABASE}',
             'db': self.MONGODB_DATABASE,
