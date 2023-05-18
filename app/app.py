@@ -14,8 +14,6 @@ from flask_smorest import Api
 from flask.cli import AppGroup
 from flask_wtf.csrf import CSRFProtect
 
-from mongoengine import errors
-
 from .config import Config
 
 
@@ -74,6 +72,10 @@ def create_flask_app(config: Config) -> Flask:
 
     # Configure mongo client
     app.mongo_client = MongoEngine(app=app)
+
+    #Add healthcheck
+    # health = HealthCheck(app, "/healthcheck")
+    # health.add_check(mongo_available())
 
     # Index routes
     # @app.route('/')
