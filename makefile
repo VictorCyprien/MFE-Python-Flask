@@ -3,10 +3,14 @@
 all: requirements
 
 run:
-	export FLASK_APP=run; export FLASK_ENV=development; flask run --host=0.0.0.0 --port=5001;
+	export FLASK_APP=run; export FLASK_ENV=development; flask run --no-debugger --host=0.0.0.0 --port=5001;
 
 shell:
 	export FLASK_APP=run; export FLASK_ENV=development; flask shell;
+
+build_schemas:
+	export FLASK_APP=run; flask openapi write specs/mfe-python-flask-spec.json;
+	export FLASK_APP=run; flask openapi write specs/mfe-python-flask-spec.yaml;
 
 clean:
 	@echo
@@ -22,7 +26,21 @@ cleaninstall: requirements clean_pip
 	@echo
 	@echo "---- Install packages from requirements.txt ----"
 	@pip install -r requirements.txt
+	@pip freeze
+	@echo "---- Install packages from requirements.dev.txt ----"
+	@pip install -r requirements.dev.txt
+	@pip freeze
 	@echo
+	@echo "---- Install packages from setup ----"
+	@$(shell echo ${PYTHON_ROCKSDB_FLAGS}) pip install -e ./
+
+install:
+	@echo
+	@echo "---- Install packages from requirements.txt ----"
+	@pip install -r requirements.txt
+	@pip freeze
+	@echo "---- Install packages from requirements.dev.txt ----"
+	@pip install -r requirements.dev.txt
 	@pip freeze
 	@echo
 	@echo "---- Install packages from setup ----"
@@ -30,8 +48,16 @@ cleaninstall: requirements clean_pip
 
 tests:
 	pytest --cov=app --cov-config=.coveragerc --cov-report=html:htmlcov --cov-report xml:cov.xml --cov-report=term \
-		-vv --doctest-modules --ignore-glob=./app/main.py --log-level=DEBUG --junitxml=report.xml ./app ./tests
+		-vv --doctest-modules --ignore-glob=./main.py --log-level=DEBUG --junitxml=report.xml ./ ./tests
 
 
 testsx:
-	pytest -x -vv --doctest-modules --ignore-glob=./identity_server/main.py --log-level=DEBUG ./identity_server ./tests
+	pytest -x -vv --doctest-modules --ignore-glob=./app/main.py --log-level=DEBUG ./app ./tests
+
+
+build_docker_image:
+	docker build -t app . 
+
+
+build_docker_container:
+	docker run -d -p 5000:5000 --env-file .env --name mfe-python-flask app
