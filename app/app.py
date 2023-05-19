@@ -93,8 +93,8 @@ def create_flask_app(config: Config) -> Flask:
     def index():
         return "Hello World !"
 
-    # from .views.users import users_blp
-    # rest_api.register_blueprint(users_blp)
+    from .views.users import users_blp
+    rest_api.register_blueprint(users_blp)
 
     app.logger.debug(f"URL Map: \n{app.url_map}")
     return app
