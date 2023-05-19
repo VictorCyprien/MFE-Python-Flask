@@ -78,20 +78,15 @@ def create_flask_app(config: Config) -> Flask:
     # health.add_check(mongo_available())
 
     # Index routes
-    # @app.route('/')
-    # def index(authenticated_user: User):
-    #     res = {
-    #         'name': config.SERVICE_NAME,
-    #         'commit_name': cname,
-    #         'commit_sha': csha,
-    #         'user_id': authenticated_user.user_id,
-    #     }
-    #     return jsonify(res)
-    # 
-
-    @app.route("/")
+    @app.route('/')
     def index():
-        return "Hello World !"
+        res = {
+            'name': config.SERVICE_NAME,
+        }
+        return jsonify(res)
+    
+
+    rest_api = Api(app)
 
     from .views.users import users_blp
     rest_api.register_blueprint(users_blp)
