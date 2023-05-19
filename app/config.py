@@ -21,6 +21,11 @@ class Config:
         # PASSWORD CUSTOM SALT
         self.SECURITY_PASSWORD_SALT = env.str('SECURITY_PASSWORD_SALT', "672B2BB59D2E432E8F3FB10E23B8AECC")
 
+        # OPENAPI
+        self.API_TITLE = self.SERVICE_NAME
+        self.API_VERSION = env.str('CI_COMMIT_REF_NAME', "dev")
+        self.OPENAPI_VERSION = "3.0.2"
+
 
     @property
     def mongodb_settings(self):
