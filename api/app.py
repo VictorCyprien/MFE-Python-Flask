@@ -12,7 +12,6 @@ from flask_cors import CORS
 from flask_mongoengine import MongoEngine
 from flask_smorest import Api
 from flask.cli import AppGroup
-from flask_wtf.csrf import CSRFProtect
 
 from .config import Config
 
@@ -22,9 +21,6 @@ def create_flask_app(config: Config) -> Flask:
     app = Flask(__name__)
     app.config["WTF_CSRF_CHECK_DEFAULT"] = True
     app.config['CORS_HEADERS'] = 'Content-Type'
-
-    csrf = CSRFProtect()
-    csrf.init_app(app)
 
     CORS(app, resources={r"/foo": {"origins": "https://localhost:port"}})
     Compress(app)
@@ -71,7 +67,8 @@ def create_flask_app(config: Config) -> Flask:
     app.debug = config.FLASK_ENV
 
     # Configure mongo client
-    app.mongo_client = MongoEngine(app=app)
+    from mongoengine import connect
+    connect(config.MONGODB_DATABASE, host=config.MONGODB_URI)
 
     #Add healthcheck
     # health = HealthCheck(app, "/healthcheck")

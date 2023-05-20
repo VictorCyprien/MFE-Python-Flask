@@ -7,7 +7,7 @@ class Config:
         env = Env()
 
         self.SERVICE_NAME = 'MFE Python-Flask'
-        self.LOGGER_LEVEL = env.str("LOGGER_LEVEL", "INFO")
+        self.LOGGER_LEVEL = env.str("LOGGER_LEVEL", "DEBUG")
 
         # FLASK
         self.FLASK_ENV = env.str('FLASK_ENV', 'dev')
