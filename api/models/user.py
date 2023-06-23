@@ -42,10 +42,6 @@ class User(Document):
     """ Last time action of the User
     """
 
-    _last_login = fields.DateTimeField(db_field="last_login")
-    """ Last time login of the User
-    """
-
     scopes = fields.ListField(fields.StringField(), default=None)
     #Note: default None is important to ensure that scopes are not serialized when exclude from model
     """ Permissions of the User
@@ -67,14 +63,6 @@ class User(Document):
     @update_time.setter
     def update_time(self, time):
         self._update_time = time
-
-    @property
-    def last_login(self):
-        return self._last_login if self._last_login is not None else None
-
-    @last_login.setter
-    def last_login(self, time):
-        self._last_login = time
 
     @classmethod
     def create(cls, input_data: dict):

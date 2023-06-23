@@ -14,7 +14,6 @@ def test_get_users(client: Flask, victor: User, tristan: User):
         'users': [
             {
                 '_creation_time': '2000-01-01 00:00:00',
-                '_last_login': ANY,
                 '_update_time': '2000-01-01 00:00:00',
                 'email': 'victor.cyprien@barbuc.fr',
                 'name': 'Victor CYPRIEN',
@@ -23,7 +22,6 @@ def test_get_users(client: Flask, victor: User, tristan: User):
             },
             {
                 '_creation_time': '2000-01-01 00:00:00',
-                '_last_login': ANY,
                 '_update_time': '2000-01-01 00:00:00',
                 'email': 'tristan.calvet@barbuc.fr',
                 'name': 'Tristan CALVET',

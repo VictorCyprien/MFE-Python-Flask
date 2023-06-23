@@ -20,7 +20,6 @@ def test_user_update(client: Flask, victor: User):
         'action': 'updated',
         'user': {
             '_creation_time': '2000-01-01 00:00:00',
-            '_last_login': ANY,
             '_update_time': ANY,
             'email': 'vic.vic@vic.fr',
             'name': 'Vic',

@@ -25,7 +25,6 @@ def test_create_user(client: Flask, victor: User):
         'action': 'created',
         'user': {
             '_creation_time': ANY,
-            '_last_login': ANY,
             '_update_time': ANY,
             'email': 'test.test@test.fr',
             'name': 'TestUser',

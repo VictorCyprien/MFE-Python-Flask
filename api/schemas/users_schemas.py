@@ -12,26 +12,19 @@ class UserSchema(Schema):
     name = fields.String(metadata={"description": "Name of the user"})
     email = fields.String(metadata={"description": "Email of the user"})
     scopes = fields.List(fields.String, metadata={"description": "Scopes of the user"})
-
-    _last_login = fields.String(
-        format="date-time",
-        allow_none=True,
-        data="last_login",
-        metadata={"exclude_if_null": True, "description": "Last login date of the user"}
-    )
     
     _creation_time = fields.String(
         format="date-time",
         allow_none=True,
         data="creation_time",
-        metadata={"exclude_if_null": True, "description": "User creation time"}
+        metadata={"description": "User creation time"}
     )
 
     _update_time = fields.String(
         format="date-time",
         allow_none=True,
         data="update_time",
-        metadata={"exclude_if_null": True, "description": "Last user update time"}
+        metadata={"description": "Last user update time"}
     )
 
     class Meta:
