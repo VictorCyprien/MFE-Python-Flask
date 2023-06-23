@@ -47,17 +47,17 @@ install:
 	@$(shell echo ${PYTHON_ROCKSDB_FLAGS}) pip install -e ./
 
 tests:
-	pytest --cov=app --cov-config=.coveragerc --cov-report=html:htmlcov --cov-report xml:cov.xml --cov-report=term \
+	pytest --cov=api --cov-config=.coveragerc --cov-report=html:htmlcov --cov-report xml:cov.xml --cov-report=term \
 		-vv --doctest-modules --ignore-glob=./main.py --log-level=DEBUG --junitxml=report.xml ./ ./tests
 
 
 testsx:
-	pytest -x -vv --doctest-modules --ignore-glob=./app/main.py --log-level=DEBUG ./app ./tests
+	pytest -x -vv --doctest-modules --ignore-glob=./api/main.py --log-level=DEBUG ./api ./tests
 
 
 build_docker_image:
-	docker build -t app . 
+	docker build -t api . 
 
 
 build_docker_container:
-	docker run -d -p 5000:5000 --env-file .env --name mfe-python-flask app
+	docker run -d -p 5000:5000 --env-file .env --name mfe-python-flask api
