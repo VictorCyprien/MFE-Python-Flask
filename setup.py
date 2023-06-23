@@ -2,25 +2,15 @@
 from setuptools import setup, find_packages
 
 required = [
-    "apispec",
-    "pymongo",
     "mongoengine",
     "Flask",
-    "flask-cors",
-    "flask-compress",
     "flask_mongoengine",
     "flask-smorest",
     "marshmallow",
-    "marshmallow_enum",
-    "colorlog",
-    "gunicorn",
-    "requests",
-    "environs",
-    "passlib",
-    "healthcheck",
+    "pytz"
 ]
 
-VERSION = "2023.05.0"
+VERSION = "2023.06.0"
 
 setup(
       name='mfe-python-flask',

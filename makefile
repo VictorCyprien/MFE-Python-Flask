@@ -3,7 +3,7 @@
 all: requirements
 
 run:
-	export FLASK_APP=run; export FLASK_ENV=development; flask run --no-debugger --host=0.0.0.0 --port=5001;
+	export FLASK_APP=run; export FLASK_ENV=development; flask run --no-debugger --host=0.0.0.0 --port=5000;
 
 shell:
 	export FLASK_APP=run; export FLASK_ENV=development; flask shell;
@@ -21,18 +21,6 @@ clean_pip: clean
 	@echo
 	@echo "---- Clean packages ----"
 	@pip freeze | grep -v "^-e" | cut -d "@" -f1 | xargs pip uninstall -y
-
-cleaninstall: requirements clean_pip
-	@echo
-	@echo "---- Install packages from requirements.txt ----"
-	@pip install -r requirements.txt
-	@pip freeze
-	@echo "---- Install packages from requirements.dev.txt ----"
-	@pip install -r requirements.dev.txt
-	@pip freeze
-	@echo
-	@echo "---- Install packages from setup ----"
-	@$(shell echo ${PYTHON_ROCKSDB_FLAGS}) pip install -e ./
 
 install:
 	@echo

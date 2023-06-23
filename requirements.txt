@@ -1,15 +1,6 @@
-environs
-rich
-pymongo
 mongoengine==0.26.0
 Flask==2.2.4
-flask-cors
-flask-compress
 flask_mongoengine
 flask-smorest
 marshmallow
-marshmallow_enum
-colorlog
-requests
-healthcheck
 pytz

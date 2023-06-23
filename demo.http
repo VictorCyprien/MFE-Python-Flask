@@ -1,0 +1,12 @@
+###
+GET http://localhost:5000/
+
+###
+POST http://localhost:5000/users
+Content-Type: application/json
+
+{
+    "email": "victor.cyprien@limayrac.fr",
+    "name": "Victor CYPRIEN",
+    "password": "password"
+}

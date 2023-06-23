@@ -1,17 +1,9 @@
 import json
-import sys
 import logging.config
-import click
 from environs import Env
 
-from urllib.parse import urlparse
-
 from flask import Flask, request, jsonify
-from flask_compress import Compress
-from flask_cors import CORS
-from flask_mongoengine import MongoEngine
 from flask_smorest import Api
-from flask.cli import AppGroup
 
 from .config import Config
 
@@ -19,12 +11,6 @@ from .config import Config
 def create_flask_app(config: Config) -> Flask:
     # Create the Flask App
     app = Flask(__name__)
-    app.config["WTF_CSRF_CHECK_DEFAULT"] = True
-    app.config['CORS_HEADERS'] = 'Content-Type'
-
-    CORS(app, resources={r"/foo": {"origins": "https://localhost:port"}})
-    Compress(app)
-
     app.logger = logging.getLogger('console')
 
     """ Log each API/APP request
@@ -53,26 +39,12 @@ def create_flask_app(config: Config) -> Flask:
 
     # Update config from given one
     app.config.update(**config.json)
-
     app.logger.info(f"Config: {json.dumps(config.json, indent=4)}")
-
-    # Log the current conf
-    cname = env.str('CI_COMMIT_REF_NAME', None)
-    csha = env.str('CI_COMMIT_SHA', None)
-    if cname:
-        app.logger.info(f"Current commit name: {cname}")
-    if csha:
-        app.logger.info(f"Current commit sha: {csha}")
-
     app.debug = config.FLASK_ENV
 
     # Configure mongo client
     from mongoengine import connect
     connect(config.MONGODB_DATABASE, host=config.MONGODB_URI)
-
-    #Add healthcheck
-    # health = HealthCheck(app, "/healthcheck")
-    # health.add_check(mongo_available())
 
     # Index routes
     @app.route('/')
