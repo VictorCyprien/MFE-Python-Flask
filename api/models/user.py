@@ -4,7 +4,6 @@ from mongoengine import Document, fields
 from mongoengine.errors import ValidationError
 
 from passlib.handlers.pbkdf2 import pbkdf2_sha256
-from passlib.hash import bcrypt
 
 from datetime import datetime
 
@@ -43,7 +42,6 @@ class User(Document):
     """
 
     scopes = fields.ListField(fields.StringField(), default=None)
-    #Note: default None is important to ensure that scopes are not serialized when exclude from model
     """ Permissions of the User
     """
 
@@ -65,7 +63,9 @@ class User(Document):
         self._update_time = time
 
     @classmethod
-    def create(cls, input_data: dict):
+    def create(cls, input_data: dict) -> "User":
+        """ Create a new user instance
+        """
         user = User()
         password = None
         if 'user_id' not in input_data:
@@ -94,6 +94,8 @@ class User(Document):
 
     
     def update(self, input_data: dict):
+        """ Update the current instance of a User
+        """
         if "email" in input_data:
             new_email = input_data["email"]
             self.email = new_email
@@ -135,6 +137,8 @@ class User(Document):
 
     @classmethod
     def get_by_id(cls, id: int, only: List[str] = None, exclude: List[str] = None) -> "User":
+        """ User getter with a ID
+        """
         try:
             user_id = int(id)
         except ValueError:
