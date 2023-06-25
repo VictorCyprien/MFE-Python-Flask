@@ -1,3 +1,5 @@
+from typing import Match
+
 from mongoengine import Document, fields
 from mongoengine.errors import ValidationError
 
@@ -66,8 +68,9 @@ class User(Document):
         """
         user = User()
         password = None
+        scopes = None
         if 'user_id' not in input_data:
-            input_data['user_id'] = cls._next_id()
+            input_data['user_id'] = cls.generated_new_id()
         if 'password' in input_data:
             password = input_data['password']
             del input_data['password']
@@ -77,14 +80,19 @@ class User(Document):
         if 'name' in input_data:
             name = input_data['name']
             del input_data['name']
+        if 'scopes' in input_data:
+            scopes = input_data['scopes']
+            del input_data['scopes']
 
         user.user_id = input_data['user_id']
         user.email = email
         user.name = name
-        user.scopes = ["user:member"]
 
         if password is not None:
-            user.set_password(password)  
+            user.set_password(password)
+        
+        user.scopes = scopes if scopes is not None else ['user:member']
+
         # Set creation time
         user.creation_time = datetime.now(tz=pytz.utc).replace(microsecond=0)
         user.update_time = datetime.now(tz=pytz.utc).replace(microsecond=0)
@@ -116,13 +124,13 @@ class User(Document):
 
     
     @staticmethod
-    def isValidEmail(email: str) -> bool:
+    def isValidEmail(email: str) -> Match[str]:
         regex = r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b'
         return re.fullmatch(regex, email)
 
 
     @classmethod
-    def _next_id(cls) -> int:
+    def generated_new_id(cls) -> int:
         user_id = random.randint(0, USER_ID_MAX_VAL)
         nb_trial = 0
         while cls.objects(pk=user_id).count() and nb_trial < 10:
