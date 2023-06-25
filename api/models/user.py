@@ -1,5 +1,3 @@
-from typing import List
-
 from mongoengine import Document, fields
 from mongoengine.errors import ValidationError
 
@@ -136,7 +134,7 @@ class User(Document):
 
 
     @classmethod
-    def get_by_id(cls, id: int, only: List[str] = None, exclude: List[str] = None) -> "User":
+    def get_by_id(cls, id: int) -> "User":
         """ User getter with a ID
         """
         try:
@@ -144,9 +142,5 @@ class User(Document):
         except ValueError:
             raise ValidationError('The user ID should be an int')
         _query = User.objects(user_id=user_id)
-        if only is not None:
-            _query = _query.only(*only)
-        if exclude is not None:
-            _query = _query.exclude(*exclude)
         user = _query.get()
         return user
