@@ -114,14 +114,6 @@ class User(Document):
         self._password = pbkdf2_sha256.using(salt=salt).hash(password)
         self.update_time = datetime.now(tz=pytz.utc).replace(microsecond=0)
 
-
-    def check_password(self, password: str) -> bool:
-        if self._password.startswith("$2a$07$"):
-            crypted_password = bcrypt.verify(password, self._password)
-        else:
-            crypted_password = pbkdf2_sha256.verify(password, self._password)
-        return crypted_password
-
     
     @staticmethod
     def isValidEmail(email: str) -> bool:
@@ -131,23 +123,23 @@ class User(Document):
 
     @classmethod
     def _next_id(cls) -> int:
-        uid = random.randint(0, USER_ID_MAX_VAL)
+        user_id = random.randint(0, USER_ID_MAX_VAL)
         nb_trial = 0
-        while cls.objects(pk=uid).count() and nb_trial < 10:
-            uid = random.randint(0, USER_ID_MAX_VAL)
+        while cls.objects(pk=user_id).count() and nb_trial < 10:
+            user_id = random.randint(0, USER_ID_MAX_VAL)
             nb_trial += 1
         if nb_trial > 10:
             raise RuntimeError("Impossible to get new user id")
-        return uid
+        return user_id
 
 
     @classmethod
     def get_by_id(cls, id: int, only: List[str] = None, exclude: List[str] = None) -> "User":
         try:
-            id = int(id)
+            user_id = int(id)
         except ValueError:
-            raise ValidationError('user_id should be an int')
-        _query = User.objects(user_id=id)
+            raise ValidationError('The user ID should be an int')
+        _query = User.objects(user_id=user_id)
         if only is not None:
             _query = _query.only(*only)
         if exclude is not None:
