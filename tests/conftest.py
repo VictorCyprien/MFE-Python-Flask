@@ -33,29 +33,6 @@ def client(app: Flask) -> Iterator[FlaskClient]:
     client = app.test_client()
     yield client
 
-
-def _raz_auth_headers(client: FlaskClient):
-    client.global_headers = {}
-
-
-@pytest.fixture(scope='function')
-def client_victor(client: FlaskClient, victor: User) -> Iterator[FlaskClient]:
-    yield client
-    _raz_auth_headers(client)
-
-
-@pytest.fixture(scope='function')
-def client_sayori(client: FlaskClient, sayori: User) -> Iterator[FlaskClient]:
-    yield client
-    _raz_auth_headers(client)
-
-
-@pytest.fixture(scope='function')
-def client_member(client: FlaskClient, member: User) -> Iterator[FlaskClient]:
-    yield client
-    _raz_auth_headers(client)
-
-
 #### USERS ####
 
 creation_date = '2000-01-01T00:00:00+00:00'
@@ -90,22 +67,6 @@ def sayori(app) -> Iterator[User]:
         user.save()
     yield user
     user.delete()
-
-
-@pytest.fixture(scope='function')
-def member(app) -> Iterator[User]:
-    #  member is not "admin"
-    user_dict = {
-        "email": "member1@limayrac.fr",
-        "name": "Member 1",
-        "password": "beedemo"
-    }
-    with freezegun.freeze_time(creation_date):
-        user = User.create(user_dict)
-        user.save()
-    yield user
-    user.delete()
-
 
 #### MOCKS ####
 
