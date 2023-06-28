@@ -1,20 +1,17 @@
 from flask.app import Flask
 from rich import print
+from mongoengine.errors import ValidationError
 
 from unittest.mock import ANY
-
-from mongoengine.errors import ValidationError
 
 from api.models.user import User
 
 
-def test_create_user(client: Flask, victor: User):
-    
-
+def test_create_user(client: Flask):
     data = {
-        "email": "test.test@test.fr",
+        "email": "natsuki@limayrac.fr",
         "password": "beedemo",
-        "name": "TestUser"
+        "name": "Natsuki"
     }
 
     res = client.post("/users/", json=data)
@@ -26,8 +23,8 @@ def test_create_user(client: Flask, victor: User):
         'user': {
             '_creation_time': ANY,
             '_update_time': ANY,
-            'email': 'test.test@test.fr',
-            'name': 'TestUser',
+            'email': 'natsuki@limayrac.fr',
+            'name': 'Natsuki',
             'scopes': ['user:member'],
             'user_id': ANY
         }
@@ -41,40 +38,8 @@ def test_create_user(client: Flask, victor: User):
     user.delete()
 
 
-def test_create_user_already_exist(client: Flask, victor: User):
-    data = {
-        "email": "test.test@test.fr",
-        "password": "beedemo",
-        "name": "TestUser"
-    }
-
-    user_already_created = User.create(data)
-    user_already_created.save()
-    user_already_created.reload()
-
-    new_data = {
-        "email": "test.test@test.fr",
-        "password": "beedemo",
-        "name": "TestUser"
-    }
-
-    res = client.post("/users/", json=new_data)
-    assert res.status_code == 400
-    data = res.json
-    print(data)
-    assert data == {
-        'code': 400, 
-        'message': 'Unable to create this user, the email address is already in use', 
-        'status': 'Bad Request'
-    }
-
-    user_already_created.delete()
-
-
-def test_create_user_invalid_data(client: Flask, victor: User):
-    data = {}
-
-    res = client.post("/users/", json=data)
+def test_create_user_invalid_data(client: Flask):
+    res = client.post("/users/", json={})
     assert res.status_code == 422
     data = res.json
     print(data)
@@ -91,7 +56,7 @@ def test_create_user_invalid_data(client: Flask, victor: User):
     }
 
 
-def test_create_user_invalid_email(client: Flask, victor: User):
+def test_create_user_invalid_email(client: Flask):
     data = {
         "email": "blabla",
         "password": "beedemo",
@@ -109,7 +74,7 @@ def test_create_user_invalid_email(client: Flask, victor: User):
     }
 
 
-def test_create_user_email_already_used(client: Flask, victor: User):
+def test_create_user_email_already_used(client: Flask):
     data = {
         "email": "blabla",
         "password": "beedemo",
@@ -126,7 +91,7 @@ def test_create_user_email_already_used(client: Flask, victor: User):
         'status': 'Bad Request'
     }
 
-def test_user_error_during_save(client: Flask, victor: User, mock_save_user_document):
+def test_user_error_during_save(client: Flask, mock_save_user_document):
     mock_save_user_document.side_effect = None
     
     data = {

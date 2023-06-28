@@ -5,7 +5,7 @@ from unittest.mock import ANY
 
 from api.models.user import User
 
-def test_delete_user(client: Flask, victor: User, sayori: User):
+def test_delete_user(client: Flask, sayori: User):
     res = client.delete(f"/users/{sayori.user_id}")
     assert res.status_code == 200
     data = res.json
@@ -23,7 +23,7 @@ def test_delete_user(client: Flask, victor: User, sayori: User):
     }
 
 
-def test_delete_user_not_found(client: Flask, victor: User, sayori: User):
+def test_delete_user_not_found(client: Flask):
     res = client.delete("/users/123456789")
     assert res.status_code == 404
     data = res.json
@@ -35,8 +35,8 @@ def test_delete_user_not_found(client: Flask, victor: User, sayori: User):
     }
 
 
-def test_delete_user_two_times(client: Flask, member: User):
-    res = client.delete(f"/users/{member.user_id}")
+def test_delete_user_two_times(client: Flask, sayori: User):
+    res = client.delete(f"/users/{sayori.user_id}")
     assert res.status_code == 200
     data = res.json
     print(data)
@@ -45,14 +45,14 @@ def test_delete_user_two_times(client: Flask, member: User):
         'user': {
             '_creation_time': '2000-01-01 00:00:00',
             '_update_time': '2000-01-01 00:00:00',
-            'email': 'member1@limayrac.fr',
-            'name': 'Member 1',
-            'scopes': ['user:member'],
+            'email': 'sayori@limayrac.fr',
+            'name': 'Sayori',
+            'scopes': ['user:admin'],
             'user_id': ANY
         }
     }
 
-    res = client.delete(f"/users/{member.user_id}")
+    res = client.delete(f"/users/{sayori.user_id}")
     assert res.status_code == 404
     data = res.json
     print(data)
