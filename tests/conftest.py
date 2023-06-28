@@ -1,10 +1,7 @@
 
 from typing import Iterator
 from flask import Flask
-from flask import testing
 from flask.testing import FlaskClient
-
-from werkzeug.datastructures import Headers
 
 from mongoengine.connection import disconnect
 from unittest.mock import Mock
@@ -30,43 +27,31 @@ def app(request) -> Iterator[Flask]:
     yield _app
 
 
-class TestClient(testing.FlaskClient):
-    global_headers = {}
-    def open(self, *args, **kwargs):
-        api_key_headers = Headers(self.global_headers)
-        headers = kwargs.pop('headers', {})
-        if not isinstance(headers, Headers):
-            headers = Headers(headers)
-        headers.extend(api_key_headers)
-        kwargs['headers'] = headers
-        return super().open(*args, **kwargs)
-
-
 @pytest.fixture(scope='module')
-def client(app: Flask) -> Iterator[TestClient]:
-    app.test_client_class = TestClient
+def client(app: Flask) -> Iterator[FlaskClient]:
+    app.test_client_class = FlaskClient
     client = app.test_client()
     yield client
 
 
-def _raz_auth_headers(client: TestClient):
+def _raz_auth_headers(client: FlaskClient):
     client.global_headers = {}
 
 
 @pytest.fixture(scope='function')
-def client_victor(client: TestClient, victor: User) -> Iterator[FlaskClient]:
+def client_victor(client: FlaskClient, victor: User) -> Iterator[FlaskClient]:
     yield client
     _raz_auth_headers(client)
 
 
 @pytest.fixture(scope='function')
-def client_tristan(client: TestClient, tristan: User) -> Iterator[FlaskClient]:
+def client_tristan(client: FlaskClient, tristan: User) -> Iterator[FlaskClient]:
     yield client
     _raz_auth_headers(client)
 
 
 @pytest.fixture(scope='function')
-def client_member(client: TestClient, member: User) -> Iterator[FlaskClient]:
+def client_member(client: FlaskClient, member: User) -> Iterator[FlaskClient]:
     yield client
     _raz_auth_headers(client)
 
