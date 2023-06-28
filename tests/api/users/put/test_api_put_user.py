@@ -29,28 +29,28 @@ def test_user_update(client: Flask, victor: User):
     }
 
 
-def test_user_update_not_admin(client: Flask, victor: User, tristan: User):
+def test_user_update_not_admin(client: Flask, victor: User, sayori: User):
     victor.scopes = ["user:member"]
     victor.save()
 
     data_put = {
-        "email": "tri.tri@coincoin.fr"
+        "email": "sayori@limayrac.fr"
     }
 
-    res = client.put(f"/users/{tristan.user_id}", json=data_put)
+    res = client.put(f"/users/{sayori.user_id}", json=data_put)
     assert res.status_code == 404
     data = res.json
     print(data)
     assert data == {
         'code': 404, 
-        'message': f'User #{tristan.user_id} not found !', 
+        'message': f'User #{sayori.user_id} not found !', 
         'status': 'Not Found'
     }
 
 
-def test_user_update_email_already_used(client: Flask, victor: User, tristan: User):
+def test_user_update_email_already_used(client: Flask, victor: User, sayori: User):
     data_put = {
-        "email": tristan.email
+        "email": sayori.email
     }
 
     res = client.put(f"/users/{victor.user_id}", json=data_put)
@@ -64,7 +64,7 @@ def test_user_update_email_already_used(client: Flask, victor: User, tristan: Us
     }
 
 
-def test_user_update_email_invalid_email(client: Flask, victor: User, tristan: User):
+def test_user_update_email_invalid_email(client: Flask, victor: User, sayori: User):
     data_put = {
         "email": "blabla"
     }

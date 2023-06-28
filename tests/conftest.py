@@ -45,7 +45,7 @@ def client_victor(client: FlaskClient, victor: User) -> Iterator[FlaskClient]:
 
 
 @pytest.fixture(scope='function')
-def client_tristan(client: FlaskClient, tristan: User) -> Iterator[FlaskClient]:
+def client_sayori(client: FlaskClient, sayori: User) -> Iterator[FlaskClient]:
     yield client
     _raz_auth_headers(client)
 
@@ -64,7 +64,7 @@ creation_date = '2000-01-01T00:00:00+00:00'
 def victor(app) -> Iterator[User]:
     #  victor is "admin"
     user_dict = {
-        "email": "victor.cyprien@barbuc.fr",
+        "email": "victor.cyprien@limayrac.fr",
         "name": "Victor CYPRIEN",
         "password": "beedemo"
     }
@@ -77,11 +77,11 @@ def victor(app) -> Iterator[User]:
 
 
 @pytest.fixture(scope='function')
-def tristan(app) -> Iterator[User]:
-    #  tristan is "admin"
+def sayori(app) -> Iterator[User]:
+    #  sayori is "admin"
     user_dict = {
-        "email": "tristan.calvet@barbuc.fr",
-        "name": "Tristan CALVET",
+        "email": "sayori@limayrac.fr",
+        "name": "Sayori",
         "password": "beedemo"
     }
     with freezegun.freeze_time(creation_date):
@@ -96,7 +96,7 @@ def tristan(app) -> Iterator[User]:
 def member(app) -> Iterator[User]:
     #  member is not "admin"
     user_dict = {
-        "email": "member1@barbuc.fr",
+        "email": "member1@limayrac.fr",
         "name": "Member 1",
         "password": "beedemo"
     }

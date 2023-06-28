@@ -5,7 +5,7 @@ from unittest.mock import ANY
 
 from api.models.user import User
 
-def test_get_users(client: Flask, victor: User, tristan: User):
+def test_get_users(client: Flask, victor: User, sayori: User):
     res = client.get("/users/")
     assert res.status_code == 200
     data = res.json
@@ -15,7 +15,7 @@ def test_get_users(client: Flask, victor: User, tristan: User):
             {
                 '_creation_time': '2000-01-01 00:00:00',
                 '_update_time': '2000-01-01 00:00:00',
-                'email': 'victor.cyprien@barbuc.fr',
+                'email': 'victor.cyprien@limayrac.fr',
                 'name': 'Victor CYPRIEN',
                 'scopes': ['user:admin'],
                 'user_id': ANY
@@ -23,8 +23,8 @@ def test_get_users(client: Flask, victor: User, tristan: User):
             {
                 '_creation_time': '2000-01-01 00:00:00',
                 '_update_time': '2000-01-01 00:00:00',
-                'email': 'tristan.calvet@barbuc.fr',
-                'name': 'Tristan CALVET',
+                'email': 'sayori@limayrac.fr',
+                'name': 'Sayori',
                 'scopes': ['user:admin'],
                 'user_id': ANY
             }
