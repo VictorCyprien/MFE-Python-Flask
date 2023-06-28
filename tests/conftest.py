@@ -77,7 +77,7 @@ creation_date = '2000-01-01T00:00:00+00:00'
 
 @pytest.fixture(scope='function')
 def victor(app) -> Iterator[User]:
-    #  victor is "superadmin"
+    #  victor is "admin"
     user_dict = {
         "email": "victor.cyprien@barbuc.fr",
         "name": "Victor CYPRIEN",
@@ -93,7 +93,7 @@ def victor(app) -> Iterator[User]:
 
 @pytest.fixture(scope='function')
 def tristan(app) -> Iterator[User]:
-    #  tristan is "superadmin"
+    #  tristan is "admin"
     user_dict = {
         "email": "tristan.calvet@barbuc.fr",
         "name": "Tristan CALVET",
@@ -109,7 +109,7 @@ def tristan(app) -> Iterator[User]:
 
 @pytest.fixture(scope='function')
 def member(app) -> Iterator[User]:
-    #  member is not "superadmin"
+    #  member is not "admin"
     user_dict = {
         "email": "member1@barbuc.fr",
         "name": "Member 1",

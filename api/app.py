@@ -31,8 +31,6 @@ def create_flask_app(config: Config) -> Flask:
         app.logger.debug(f'      Body: {response.json}')
         return response
 
-    env = Env()
-
     app.logger.info('.------------------.')
     app.logger.info('| MFE Python-Flask|')
     app.logger.info('.------------------.')

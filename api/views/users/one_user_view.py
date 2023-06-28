@@ -1,5 +1,4 @@
 from typing import Dict
-import logging
 
 from flask.views import MethodView
 
@@ -11,10 +10,6 @@ from ...schemas.users_schemas import (
     InputUpdateUserSchema,
     UserResponseSchema
 )
-
-
-logger = logging.getLogger('console')
-
 
 @users_blp.route('/<int:user_id>')
 class OneUserView(MethodView):
