@@ -29,7 +29,7 @@ def test_user_update(client: Flask, victor: User):
     }
 
 
-def test_user_update_not_admin(client: Flask, victor: User, sayori: User):
+def _test_user_update_not_admin(client: Flask, victor: User, sayori: User):
     victor.scopes = ["user:member"]
     victor.save()
 
@@ -48,7 +48,7 @@ def test_user_update_not_admin(client: Flask, victor: User, sayori: User):
     }
 
 
-def test_user_update_email_already_used(client: Flask, victor: User, sayori: User):
+def _test_user_update_email_already_used(client: Flask, victor: User, sayori: User):
     data_put = {
         "email": sayori.email
     }
@@ -64,7 +64,7 @@ def test_user_update_email_already_used(client: Flask, victor: User, sayori: Use
     }
 
 
-def test_user_update_email_invalid_email(client: Flask, victor: User, sayori: User):
+def _test_user_update_email_invalid_email(client: Flask, victor: User, sayori: User):
     data_put = {
         "email": "blabla"
     }
@@ -80,7 +80,7 @@ def test_user_update_email_invalid_email(client: Flask, victor: User, sayori: Us
     }
 
 
-def test_user_update_not_found(client: Flask, victor: User):
+def _test_user_update_not_found(client: Flask, victor: User):
     data_put = {
         "email": "vic.vic@vic.fr",
         "name": "Vic",

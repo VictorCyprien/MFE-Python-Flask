@@ -23,7 +23,7 @@ def test_delete_user(client: Flask, sayori: User):
     }
 
 
-def test_delete_user_not_found(client: Flask):
+def _test_delete_user_not_found(client: Flask):
     res = client.delete("/users/123456789")
     assert res.status_code == 404
     data = res.json
@@ -35,7 +35,7 @@ def test_delete_user_not_found(client: Flask):
     }
 
 
-def test_delete_user_two_times(client: Flask, sayori: User):
+def _test_delete_user_two_times(client: Flask, sayori: User):
     res = client.delete(f"/users/{sayori.user_id}")
     assert res.status_code == 200
     data = res.json

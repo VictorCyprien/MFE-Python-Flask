@@ -1,7 +1,7 @@
-from marshmallow import Schema, fields
+from marshmallow import Schema, fields, validates_schema, ValidationError
 from marshmallow.validate import Range
 
-from ..models.user import USER_ID_MAX_VAL
+from ..models.user import USER_ID_MAX_VAL, User
 
 class UserSchema(Schema):
     user_id = fields.Integer(
@@ -58,6 +58,21 @@ class InputCreateUserSchema(Schema):
         metadata={"description": "Scopes of the user"},
         required=False
     )
+
+    @validates_schema
+    def validation_payload(self, data, **kwargs):
+        email: str = data["email"]
+        name: str = data["name"]
+        password: str = data["password"]
+
+        if not email.strip() or not User.isValidEmail(email):
+            raise ValidationError("The email is not correct")
+        
+        if not name.strip():
+            raise ValidationError("The name is empty")
+
+        if not password.strip():
+            raise ValidationError("The password is empty")
 
     class Meta:
         description = "Input informations need to create user."

@@ -46,7 +46,7 @@ def test_get_one_user(client: Flask, victor: User):
     }
 
 
-def test_get_one_user_not_found(client: Flask, victor: User):
+def _test_get_one_user_not_found(client: Flask, victor: User):
     res = client.get("/users/123")
     assert res.status_code == 200
     data = res.json

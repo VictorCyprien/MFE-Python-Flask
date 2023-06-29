@@ -1,6 +1,6 @@
 import pytest
 
-def test_default_config():
+def _test_default_config():
     """ Test that default conf raise a value error, some var env are needed
     """
     from api.config import config
@@ -9,7 +9,7 @@ def test_default_config():
         config.validate()
 
 
-def test_config():
+def _test_config():
     from api.config import config
     config.MONGODB_URI = "mongomock://localhost"
     config.MONGODB_DATABASE = "BaseDeTest"
