@@ -38,6 +38,38 @@ def test_create_user(client: Flask):
     user.delete()
 
 
+def test_create_user_with_scopes(client: Flask):
+    data = {
+        "email": "natsuki@limayrac.fr",
+        "password": "beedemo",
+        "name": "Natsuki",
+        "scopes": ["user:member"],
+    }
+
+    res = client.post("/users/", json=data)
+    assert res.status_code == 201
+    data = res.json
+    print(data)
+    assert data == {
+        'action': 'created',
+        'user': {
+            '_creation_time': ANY,
+            '_update_time': ANY,
+            'email': 'natsuki@limayrac.fr',
+            'name': 'Natsuki',
+            'scopes': ['user:member'],
+            'user_id': ANY
+        }
+    }
+
+    user_id = data['user']['user_id']
+    user = User.objects().get(user_id=user_id)
+    assert user.email == 'natsuki@limayrac.fr'
+    assert user._password.startswith("$pbkdf2-sha256$")
+
+    user.delete()
+
+
 def test_create_user_empty_data(client: Flask):
     res = client.post("/users/", json={})
     assert res.status_code == 422

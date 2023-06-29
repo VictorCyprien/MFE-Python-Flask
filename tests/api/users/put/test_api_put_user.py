@@ -28,6 +28,31 @@ def test_user_update(client: Flask, victor: User):
         }
     }
 
+
+def test_user_update_with_scopes(client: Flask, victor: User):
+    data_put = {
+        "email": "vic.vic@vic.fr",
+        "name": "Vic",
+        "password": "vic123456",
+        "scopes": ['user:admin', "user:member"]
+    }
+
+    res = client.put(f"/users/{victor.user_id}", json=data_put)
+    assert res.status_code == 200
+    data = res.json
+    print(data)
+    assert data == {
+        'action': 'updated',
+        'user': {
+            '_creation_time': '2000-01-01 00:00:00',
+            '_update_time': ANY,
+            'email': 'vic.vic@vic.fr',
+            'name': 'Vic',
+            'scopes': ['user:admin', 'user:member'],
+            'user_id': ANY
+        }
+    }
+
 def test_user_update_email_already_used(client: Flask, victor: User, sayori: User):
     data_put = {
         "email": sayori.email
