@@ -13,7 +13,7 @@ from ...schemas.users_schemas import (
     UserResponseSchema
 )
 
-from ...helpers.errors_handler import BadRequest
+from ...helpers.errors_handler import BadRequest, ErrorHandler
 
 logger = logging.getLogger('console')
 
@@ -41,7 +41,7 @@ class RootUsersView(MethodView):
         try:
             user.save()
         except NotUniqueError:
-            raise BadRequest("This email is already used !")
+            raise BadRequest(ErrorHandler.EMAIL_ALREADY_USED.value)
 
         return {
             'action': 'created',
