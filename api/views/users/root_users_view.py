@@ -24,6 +24,7 @@ class RootUsersView(MethodView):
     @users_blp.doc(operationId='ListUsers')
     @users_blp.response(200, schema=GetUsersListSchema, description="List of users found in the database")
     def get(self):
+        """Get a list of users"""
         users = User.objects()
         
         return {
