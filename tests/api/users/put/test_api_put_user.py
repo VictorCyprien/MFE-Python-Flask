@@ -28,26 +28,6 @@ def test_user_update(client: Flask, victor: User):
         }
     }
 
-
-def _test_user_update_not_admin(client: Flask, victor: User, sayori: User):
-    victor.scopes = ["user:member"]
-    victor.save()
-
-    data_put = {
-        "email": "sayori@limayrac.fr"
-    }
-
-    res = client.put(f"/users/{sayori.user_id}", json=data_put)
-    assert res.status_code == 404
-    data = res.json
-    print(data)
-    assert data == {
-        'code': 404, 
-        'message': f'User #{sayori.user_id} not found !', 
-        'status': 'Not Found'
-    }
-
-
 def _test_user_update_email_already_used(client: Flask, victor: User, sayori: User):
     data_put = {
         "email": sayori.email
