@@ -99,29 +99,6 @@ def test_create_user_email_already_used(client: Flask, victor: User):
     print(data)
     assert data == {
         'code': 400, 
-        'message': 'This email is invalid', 
+        'message': 'This email is already used !', 
         'status': 'Bad Request'
     }
-
-def _test_user_error_during_save(client: Flask, mock_save_user_document):
-    mock_save_user_document.side_effect = None
-    
-    data = {
-        "email": "test.test@test.fr",
-        "password": "beedemo",
-        "name": "TestUser"
-    }
-
-    mock_save_user_document.side_effect = ValidationError
-
-    res = client.post("/users/", json=data)
-    assert res.status_code == 400
-    data = res.json
-    print(data)
-    assert data == {
-        'code': 400,
-        'message': 'An error has occured during profil creation, please try again',
-        'status': 'Bad Request'
-    }
-
-    mock_save_user_document.assert_called()
