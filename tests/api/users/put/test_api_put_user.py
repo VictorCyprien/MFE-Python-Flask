@@ -28,7 +28,7 @@ def test_user_update(client: Flask, victor: User):
         }
     }
 
-def _test_user_update_email_already_used(client: Flask, victor: User, sayori: User):
+def test_user_update_email_already_used(client: Flask, victor: User, sayori: User):
     data_put = {
         "email": sayori.email
     }
@@ -39,28 +39,28 @@ def _test_user_update_email_already_used(client: Flask, victor: User, sayori: Us
     print(data)
     assert data == {
         'code': 400,
-        'message': 'An error has occured during profil update, please try again',
+        'message': 'Something went wrong when updating the user, please try again !',
         'status': 'Bad Request'
     }
 
 
-def _test_user_update_email_invalid_email(client: Flask, victor: User, sayori: User):
+def test_user_update_email_invalid_email(client: Flask, victor: User, sayori: User):
     data_put = {
         "email": "blabla"
     }
 
     res = client.put(f"/users/{victor.user_id}", json=data_put)
-    assert res.status_code == 400
+    assert res.status_code == 422
     data = res.json
     print(data)
     assert data == {
-        'code': 400, 
-        'message': 'This email is invalid', 
-        'status': 'Bad Request'
+        'code': 422,
+        'errors': {'json': {'_schema': ['The email is not correct']}},
+        'status': 'Unprocessable Entity'
     }
 
 
-def _test_user_update_not_found(client: Flask, victor: User):
+def test_user_update_not_found(client: Flask, victor: User):
     data_put = {
         "email": "vic.vic@vic.fr",
         "name": "Vic",
@@ -73,6 +73,6 @@ def _test_user_update_not_found(client: Flask, victor: User):
     print(data)
     assert data == {
         'code': 404,
-        'message': 'User #86489686484864 not found !',
+        'message': "This user doesn't exist !",
         'status': 'Not Found'
     }
