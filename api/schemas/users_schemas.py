@@ -89,6 +89,13 @@ class InputUpdateUserSchema(Schema):
         required=False
     )
 
+    @validates_schema
+    def validation_payload(self, data, **kwargs):
+        email: str = data.get("email", None)
+
+        if email is not None and not email.strip() or not User.isValidEmail(email):
+            raise ValidationError("The email is not correct")
+
     class Meta:
         description = "New user information"
         ordered = True
