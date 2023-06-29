@@ -4,3 +4,6 @@ flask_mongoengine
 flask-smorest
 marshmallow
 pytz
+gunicorn
+environs
+passlib
