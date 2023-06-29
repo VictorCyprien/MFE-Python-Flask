@@ -53,6 +53,25 @@ def test_user_update_with_scopes(client: Flask, victor: User):
         }
     }
 
+
+def test_user_update_no_payload(client: Flask, victor: User):
+    res = client.put(f"/users/{victor.user_id}", json={})
+    assert res.status_code == 200
+    data = res.json
+    print(data)
+    assert data == {
+        'action': 'updated',
+        'user': {
+            '_creation_time': '2000-01-01 00:00:00',
+            '_update_time': ANY,
+            'email': 'victor.cyprien@limayrac.fr',
+            'name': 'Victor CYPRIEN',
+            'scopes': ['user:admin'],
+            'user_id': ANY
+        }
+    }
+
+
 def test_user_update_email_already_used(client: Flask, victor: User, sayori: User):
     data_put = {
         "email": sayori.email
