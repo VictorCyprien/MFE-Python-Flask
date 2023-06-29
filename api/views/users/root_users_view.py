@@ -13,6 +13,7 @@ from ...schemas.users_schemas import (
     UserResponseSchema
 )
 
+from ...helpers.errors_handler import BadRequest
 
 logger = logging.getLogger('console')
 
@@ -36,7 +37,11 @@ class RootUsersView(MethodView):
     def post(self, input_data: dict):
         """Create a new user"""
         user = User.create(input_data=input_data)
-        user.save()
+
+        try:
+            user.save()
+        except NotUniqueError:
+            raise BadRequest("This email is already used !")
 
         return {
             'action': 'created',
