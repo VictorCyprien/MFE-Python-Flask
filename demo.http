@@ -1,8 +1,15 @@
-###
-GET http://localhost:5000/
+@URL=http://localhost:5000/
+@USER_ID=481925087
 
 ###
-POST http://localhost:5000/users
+GET {{URL}}
+
+
+###
+GET {{URL}}/users
+
+###
+POST {{URL}}/users
 Content-Type: application/json
 
 {
@@ -10,3 +17,23 @@ Content-Type: application/json
     "name": "Victor CYPRIEN",
     "password": "password"
 }
+
+
+###
+GET {{URL}}/users/{{USER_ID}}
+
+
+###
+PUT {{URL}}/users/{{USER_ID}}
+Content-Type: application/json
+
+{
+    "email": "victor.cyprien@limayrac.fr",
+    "name": "Victor CYPRIEN",
+    "password": "password"
+}
+
+
+###
+DELETE {{URL}}/users/{{USER_ID}}
+Content-Type: application/json
