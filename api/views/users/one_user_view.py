@@ -2,7 +2,7 @@ from typing import Dict
 
 from flask.views import MethodView
 
-from mongoengine.errors import DoesNotExist
+from mongoengine.errors import DoesNotExist, NotUniqueError
 
 from .users_blp import users_blp
 from ...models.user import User
@@ -13,7 +13,7 @@ from ...schemas.users_schemas import (
     UserResponseSchema
 )
 
-from ...helpers.errors_handler import NotFound, ErrorHandler
+from ...helpers.errors_handler import BadRequest, NotFound, ErrorHandler
 
 @users_blp.route('/<int:user_id>')
 class OneUserView(MethodView):
@@ -46,7 +46,11 @@ class OneUserView(MethodView):
             raise NotFound(ErrorHandler.USER_NOT_FOUND.value)
         
         user.update(input_dict)
-        user.save()
+
+        try:
+            user.save()
+        except NotUniqueError:
+            raise BadRequest(ErrorHandler.UPDATE_USER_ERROR.value)
 
         return {
             "action": "updated",
