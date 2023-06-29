@@ -7,7 +7,10 @@ required = [
     "flask_mongoengine",
     "flask-smorest",
     "marshmallow",
-    "pytz"
+    "pytz",
+    "gunicorn",
+    "environs",
+    "passlib"
 ]
 
 VERSION = "2023.06.0"

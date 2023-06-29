@@ -15,7 +15,7 @@ class Config:
 
         # MONGODB
         self.MONGODB_URI = env.str('MONGODB_URI', 'mongodb://localhost:27017')
-        self.MONGODB_DATABASE = env.str('MONGODB_DATABASE', 'mfe-python-flask')
+        self.MONGODB_DATABASE = env.str('MONGODB_DATABASE', 'mfe-users')
         self.MONGODB_CONNECT = False
 
         # PASSWORD CUSTOM SALT

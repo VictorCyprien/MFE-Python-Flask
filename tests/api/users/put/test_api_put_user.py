@@ -29,24 +29,29 @@ def test_user_update(client: Flask, victor: User):
     }
 
 
-def test_user_update_not_admin(client: Flask, victor: User, sayori: User):
-    victor.scopes = ["user:member"]
-    victor.save()
-
+def test_user_update_with_scopes(client: Flask, victor: User):
     data_put = {
-        "email": "sayori@limayrac.fr"
+        "email": "vic.vic@vic.fr",
+        "name": "Vic",
+        "password": "vic123456",
+        "scopes": ['user:admin', "user:member"]
     }
 
-    res = client.put(f"/users/{sayori.user_id}", json=data_put)
-    assert res.status_code == 404
+    res = client.put(f"/users/{victor.user_id}", json=data_put)
+    assert res.status_code == 200
     data = res.json
     print(data)
     assert data == {
-        'code': 404, 
-        'message': f'User #{sayori.user_id} not found !', 
-        'status': 'Not Found'
+        'action': 'updated',
+        'user': {
+            '_creation_time': '2000-01-01 00:00:00',
+            '_update_time': ANY,
+            'email': 'vic.vic@vic.fr',
+            'name': 'Vic',
+            'scopes': ['user:admin', 'user:member'],
+            'user_id': ANY
+        }
     }
-
 
 def test_user_update_email_already_used(client: Flask, victor: User, sayori: User):
     data_put = {
@@ -59,7 +64,7 @@ def test_user_update_email_already_used(client: Flask, victor: User, sayori: Use
     print(data)
     assert data == {
         'code': 400,
-        'message': 'An error has occured during profil update, please try again',
+        'message': 'Something went wrong when updating the user, please try again !',
         'status': 'Bad Request'
     }
 
@@ -70,13 +75,13 @@ def test_user_update_email_invalid_email(client: Flask, victor: User, sayori: Us
     }
 
     res = client.put(f"/users/{victor.user_id}", json=data_put)
-    assert res.status_code == 400
+    assert res.status_code == 422
     data = res.json
     print(data)
     assert data == {
-        'code': 400, 
-        'message': 'This email is invalid', 
-        'status': 'Bad Request'
+        'code': 422,
+        'errors': {'json': {'_schema': ['The email is not correct']}},
+        'status': 'Unprocessable Entity'
     }
 
 
@@ -93,6 +98,6 @@ def test_user_update_not_found(client: Flask, victor: User):
     print(data)
     assert data == {
         'code': 404,
-        'message': 'User #86489686484864 not found !',
+        'message': "This user doesn't exist !",
         'status': 'Not Found'
     }

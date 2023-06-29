@@ -32,13 +32,45 @@ def test_create_user(client: Flask):
 
     user_id = data['user']['user_id']
     user = User.objects().get(user_id=user_id)
-    assert user.email == 'test.test@test.fr'
+    assert user.email == 'natsuki@limayrac.fr'
     assert user._password.startswith("$pbkdf2-sha256$")
 
     user.delete()
 
 
-def test_create_user_invalid_data(client: Flask):
+def test_create_user_with_scopes(client: Flask):
+    data = {
+        "email": "natsuki@limayrac.fr",
+        "password": "beedemo",
+        "name": "Natsuki",
+        "scopes": ["user:member"],
+    }
+
+    res = client.post("/users/", json=data)
+    assert res.status_code == 201
+    data = res.json
+    print(data)
+    assert data == {
+        'action': 'created',
+        'user': {
+            '_creation_time': ANY,
+            '_update_time': ANY,
+            'email': 'natsuki@limayrac.fr',
+            'name': 'Natsuki',
+            'scopes': ['user:member'],
+            'user_id': ANY
+        }
+    }
+
+    user_id = data['user']['user_id']
+    user = User.objects().get(user_id=user_id)
+    assert user.email == 'natsuki@limayrac.fr'
+    assert user._password.startswith("$pbkdf2-sha256$")
+
+    user.delete()
+
+
+def test_create_user_empty_data(client: Flask):
     res = client.post("/users/", json={})
     assert res.status_code == 422
     data = res.json
@@ -56,6 +88,18 @@ def test_create_user_invalid_data(client: Flask):
     }
 
 
+def test_create_user_invalid_data(client: Flask):
+    res = client.post("/users/", json={"email": "", "name": " ", "password": ""})
+    assert res.status_code == 422
+    data = res.json
+    print(data)
+    assert data == {
+        'code': 422,
+        'errors': {'json': {'_schema': ['The email is not correct']}},
+        'status': 'Unprocessable Entity'
+    }
+
+
 def test_create_user_invalid_email(client: Flask):
     data = {
         "email": "blabla",
@@ -64,21 +108,21 @@ def test_create_user_invalid_email(client: Flask):
     }
 
     res = client.post("/users/", json=data)
-    assert res.status_code == 400
+    assert res.status_code == 422
     data = res.json
     print(data)
     assert data == {
-        'code': 400, 
-        'message': 'This email is invalid', 
-        'status': 'Bad Request'
+        'code': 422,
+        'errors': {'json': {'_schema': ['The email is not correct']}},
+        'status': 'Unprocessable Entity'
     }
 
 
-def test_create_user_email_already_used(client: Flask):
+def test_create_user_email_already_used(client: Flask, victor: User):
     data = {
-        "email": "blabla",
-        "password": "beedemo",
-        "name": "TestUser"
+        "email": "victor.cyprien@limayrac.fr",
+        "password": "123",
+        "name": "Victor"
     }
 
     res = client.post("/users/", json=data)
@@ -87,29 +131,6 @@ def test_create_user_email_already_used(client: Flask):
     print(data)
     assert data == {
         'code': 400, 
-        'message': 'This email is invalid', 
+        'message': 'This email is already used !', 
         'status': 'Bad Request'
     }
-
-def test_user_error_during_save(client: Flask, mock_save_user_document):
-    mock_save_user_document.side_effect = None
-    
-    data = {
-        "email": "test.test@test.fr",
-        "password": "beedemo",
-        "name": "TestUser"
-    }
-
-    mock_save_user_document.side_effect = ValidationError
-
-    res = client.post("/users/", json=data)
-    assert res.status_code == 400
-    data = res.json
-    print(data)
-    assert data == {
-        'code': 400,
-        'message': 'An error has occured during profil creation, please try again',
-        'status': 'Bad Request'
-    }
-
-    mock_save_user_document.assert_called()

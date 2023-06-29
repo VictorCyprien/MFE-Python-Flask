@@ -67,15 +67,3 @@ def sayori(app) -> Iterator[User]:
         user.save()
     yield user
     user.delete()
-
-#### MOCKS ####
-
-@pytest.fixture
-def mock_save_user_document():
-    from api.models.user import User
-    from mongoengine.errors import ValidationError
-    _original = User.save
-    User.save = Mock()
-    User.save.side_effect = ValidationError
-    yield User.save
-    User.save = _original

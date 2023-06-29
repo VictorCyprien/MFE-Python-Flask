@@ -44,8 +44,8 @@ testsx:
 
 
 build_docker_image:
-	docker build -t api . 
+	docker build -t mfe-python-flask .
 
 
 build_docker_container:
-	docker run -d -p 5000:5000 --env-file .env --name mfe-python-flask api
+	docker run -d -p 5000:5000 --env-file .env --name mfe-python-flask mfe-python-flask

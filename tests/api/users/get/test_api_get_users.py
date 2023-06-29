@@ -48,16 +48,11 @@ def test_get_one_user(client: Flask, victor: User):
 
 def test_get_one_user_not_found(client: Flask, victor: User):
     res = client.get("/users/123")
-    assert res.status_code == 200
+    assert res.status_code == 404
     data = res.json
     print(data)
     assert data == {
-        'user': {
-            '_creation_time': '2000-01-01 00:00:00',
-            '_update_time': '2000-01-01 00:00:00',
-            'email': 'victor.cyprien@limayrac.fr',
-            'name': 'Victor CYPRIEN',
-            'scopes': ['user:admin'],
-            'user_id': victor.user_id
-        }
+        'code': 404, 
+        'message': "This user doesn't exist !", 
+        'status': 'Not Found'
     }

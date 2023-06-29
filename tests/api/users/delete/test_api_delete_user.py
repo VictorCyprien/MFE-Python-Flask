@@ -30,7 +30,7 @@ def test_delete_user_not_found(client: Flask):
     print(data)
     assert data == {
         'code': 404, 
-        'message': 'User #123456789 not found !', 
+        'message': "This user doesn't exist !", 
         'status': 'Not Found'
     }
 
@@ -56,4 +56,8 @@ def test_delete_user_two_times(client: Flask, sayori: User):
     assert res.status_code == 404
     data = res.json
     print(data)
-    assert data == {}
+    assert data == {
+        'code': 404, 
+        'message': "This user doesn't exist !", 
+        'status': 'Not Found'
+    }
