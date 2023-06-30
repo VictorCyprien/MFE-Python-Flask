@@ -53,13 +53,16 @@ Scientific project on the robustification of a Python Flask API
     To check if Docker is installed, open a terminal and type : `docker`<br>
     If you have a command list, congratulation you just install Docker !
 
+    Then, you need to create a network :
+    - `docker network create mfe-network`
+
     After this, you can create a container for MongoDB
 
 8. Setup MongoDB in Docker
 
     - Pull a mongo image `docker pull mongo`
     - Create a volume `docker volume create mongodb_volume`
-    - Create a new container `docker run -d -p 27017:27017 -v mongodb_volume:/data/db --name mfe-db mongo`
+    - Create a new container `docker run -d -p 27017:27017 -v mongodb_volume:/data/db --name mfe-db --network mfe-network mongo`
     - You are good to go !
 
 9. Setup environnements variable
@@ -101,15 +104,15 @@ The port doesn't need to change, you can leave him at `27017`
 Then, build the docker image using this command :
 - `make build_docker_image`<br>
 ___Note___ : If your system can't execute the command `make`, do this instead :
-- `docker build -t mfe-python-flask .`<br>
-`mfe-python-flask` is the name of the image
+- `docker build -t mfe-api .`<br>
+`mfe-api` is the name of the image
 
 __Warning__ : Be sure to set environnements variables like said as mentioned above before building the container !
 
 Finally, build the container using this command :
 - `make build_docker_container`<br>
 ___Note___ : If your system can't execute the command `make`, do this instead :
-- `docker run -d -p 5000:5000 --env-file .env --name mfe-python-flask mfe-python-flask`
+- `docker run -d -p 5000:5000 --env-file .env --name mfe-api --network mfe-network mfe-api`
 
 Here, we set the port to 5000 and use the env file to apply configuration
 
