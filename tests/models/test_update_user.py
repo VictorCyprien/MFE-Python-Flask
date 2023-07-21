@@ -1,4 +1,3 @@
-
 from api.models.user import User
 
 def test_model_update_user(app, victor: User):
@@ -14,4 +13,3 @@ def test_model_update_user(app, victor: User):
 
     assert victor.email == "test.test@test.fr"
     assert old_password != new_password
-    
