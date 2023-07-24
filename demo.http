@@ -15,7 +15,8 @@ Content-Type: application/json
 {
     "email": "victor.cyprien@limayrac.fr",
     "name": "Victor CYPRIEN",
-    "password": "password"
+    "password": "password",
+    "user_id": 123
 }
 
 
