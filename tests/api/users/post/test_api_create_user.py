@@ -70,6 +70,29 @@ def test_create_user_with_user_id(client: Flask):
     user.delete()
 
 
+def test_create_user_with_user_id_negative(client: Flask):
+    data = {
+        "email": "natsuki@limayrac.fr",
+        "password": "beedemo",
+        "name": "Natsuki",
+        "user_id": -1
+    }
+
+    res = client.post("/users/", json=data)
+    assert res.status_code == 422
+    data = res.json
+    print(data)
+    assert data == {
+        'code': 422,
+        'errors': {
+            'json': {
+                'user_id': ['The user_id is incorrect. It must be greater than 0']
+            }
+        }, 
+        'status': 'Unprocessable Entity'
+    }
+
+
 def test_create_user_with_scopes(client: Flask):
     data = {
         "email": "natsuki@limayrac.fr",
