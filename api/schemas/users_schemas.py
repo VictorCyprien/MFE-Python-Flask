@@ -50,6 +50,7 @@ class GetUsersListSchema(Schema):
 
 
 class InputCreateUserSchema(Schema):
+    user_id = fields.Integer(metadata={"description": "ID of the User"})
     email = fields.String(metadata={"description": "Email of the user"}, required=True)
     password = fields.String(metadata={"description": "Password of the user"}, required=True)
     name = fields.String(metadata={"description": "Name of the user"}, required=True)
