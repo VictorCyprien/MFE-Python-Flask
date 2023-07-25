@@ -1,6 +1,6 @@
 import pytest
 
-from mongoengine.errors import DoesNotExist
+from mongoengine.errors import DoesNotExist, ValidationError
 
 from api.models.user import User
 
@@ -12,4 +12,9 @@ def test_model_get_user(app, victor: User, sayori: User):
     assert search == sayori
 
     with pytest.raises(DoesNotExist):
-        search = User.get_by_id(123)
+        User.get_by_id(123)
+
+
+def test_model_get_user_wrong_id_format(app):
+    with pytest.raises(ValidationError):
+        User.get_by_id("MY_ID")
