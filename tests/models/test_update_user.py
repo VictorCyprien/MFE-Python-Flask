@@ -1,15 +1,21 @@
 from api.models.user import User
 
 def test_model_update_user(app, victor: User):
-    
-    victor.email = "test.test@test.fr"
-    
-    old_password = victor._password
-    victor.set_password("beedemo123")
-    
+    data_update = {
+        "email": "victor.cyprien123@limayrac.fr",
+        "password": "beedemo456",
+        "name": "CYPRIEN Victor",
+        "scopes": ["user:member"]
+    }
+
+    assert victor.email == "victor.cyprien@limayrac.fr"
+    assert victor.name == "Victor CYPRIEN"
+    assert victor.scopes == ["user:admin"]
+
+    victor.update(input_data=data_update)
     victor.save()
+    victor.reload()
 
-    new_password = victor._password
-
-    assert victor.email == "test.test@test.fr"
-    assert old_password != new_password
+    assert victor.email != "victor.cyprien@limayrac.fr" and victor.email == "victor.cyprien123@limayrac.fr"
+    assert victor.name != "Victor CYPRIEN" and victor.name == "CYPRIEN Victor"
+    assert victor.scopes != ["user:admin"] and victor.scopes == ["user:member"]
