@@ -13,7 +13,7 @@ required = [
     "passlib"
 ]
 
-VERSION = "2023.06.0"
+VERSION = "2023.8.0"
 
 setup(
       name='mfe-python-flask',
