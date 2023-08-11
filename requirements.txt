@@ -1,0 +1,9 @@
+mongoengine==0.26.0
+Flask==2.2.4
+flask_mongoengine
+flask-smorest
+marshmallow
+pytz
+gunicorn
+environs
+passlib
