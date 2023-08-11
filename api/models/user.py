@@ -132,12 +132,6 @@ class User(Document):
     @classmethod
     def generated_new_id(cls) -> int:
         user_id = random.randint(0, USER_ID_MAX_VAL)
-        nb_trial = 0
-        while cls.objects(pk=user_id).count() and nb_trial < 10:
-            user_id = random.randint(0, USER_ID_MAX_VAL)
-            nb_trial += 1
-        if nb_trial > 10:
-            raise RuntimeError("Impossible to get new user id")
         return user_id
 
 
